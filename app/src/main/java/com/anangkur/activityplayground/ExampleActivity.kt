@@ -4,41 +4,32 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatTextView
 
 class ExampleActivity : AppCompatActivity() {
+
+    private var textIntent: AppCompatTextView? = null
+    private var textBundle: AppCompatTextView? = null
+    private var textSerializable: AppCompatTextView? = null
+    private var textParcelable: AppCompatTextView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_example)
-    }
 
-    override fun onStart() {
-        super.onStart()
-        Log.d("ActivityLifecycle", "ini onStart()")
-    }
+        textIntent = findViewById(R.id.text_intent)
+        textBundle = findViewById(R.id.text_bundle)
+        textSerializable = findViewById(R.id.text_serializable)
+        textParcelable = findViewById(R.id.text_parcelable)
 
-    override fun onResume() {
-        super.onResume()
+        val string = intent?.getStringExtra(MainActivity.EXTRA_STRING)
+        val bundle = intent?.getBundleExtra(MainActivity.EXTRA_BUNDLE)
+        val serializable = intent?.getSerializableExtra(MainActivity.EXTRA_SERIALIZABLE) as SerializableClass
+        val parcelable = intent?.getParcelableExtra<ParcelableClass>(MainActivity.EXTRA_PARCELABLE)
 
-        Log.d("ActivityLifecycle", "ini onResume()")
-
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        Log.d("ActivityLifecycle", "ini onPause()")
-    }
-
-    override fun onStop() {
-        super.onStop()
-
-        Log.d("ActivityLifecycle", "ini onStop()")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        Log.d("ActivityLifecycle", "ini onDestroy()")
+        textIntent?.text = string
+        textBundle?.text = "${bundle?.getString(MainActivity.EXTRA_STRING)} ${bundle?.getInt(MainActivity.EXTRA_INTEGER)}"
+        textSerializable?.text = "${serializable.name} - ${serializable.age} - ${serializable.gender}"
+        textParcelable?.text = "${parcelable?.name} - ${parcelable?.age} - ${parcelable?.gender}"
     }
 }
